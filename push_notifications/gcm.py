@@ -20,8 +20,11 @@ from .models import GCMDevice
 FCM_TARGETS_KEYS = [
 	"to", "condition", "notification_key"
 ]
+FCM_ANDROID_OPTIONS_KEYS = [
+	"priority"
+]
 FCM_OPTIONS_KEYS = [
-	"collapse_key", "priority", "content_available", "delay_while_idle", "time_to_live",
+	"collapse_key", "content_available", "delay_while_idle", "time_to_live",
 	"restricted_package_name", "dry_run", "mutable_content"
 ]
 FCM_NOTIFICATIONS_PAYLOAD_KEYS = [
@@ -140,7 +143,10 @@ def _cm_send_request(
 
 	if data:
 		payload["data"] = data
-
+	payload["android"] = {}
+	payload["android"].update({
+		k: v for k, v in kwargs.items() if v and (k in FCM_ANDROID_OPTIONS_KEYS)
+	})
 	# Attach any additional non falsy keyword args (targets, options)
 	# See ref : https://firebase.google.com/docs/cloud-messaging/http-server-ref#table1
 	payload.update({
