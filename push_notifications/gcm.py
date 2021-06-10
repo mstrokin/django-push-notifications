@@ -24,7 +24,7 @@ FCM_ANDROID_OPTIONS_KEYS = [
 	"priority"
 ]
 FCM_OPTIONS_KEYS = [
-	"collapse_key", "content_available", "delay_while_idle", "time_to_live",
+	"collapse_key", "content_available", "delay_while_idle", "priority", "time_to_live",
 	"restricted_package_name", "dry_run", "mutable_content"
 ]
 FCM_NOTIFICATIONS_PAYLOAD_KEYS = [
@@ -155,7 +155,8 @@ def _cm_send_request(
 
 	# Sort the keys for deterministic output (useful for tests)
 	json_payload = json.dumps(payload, separators=(",", ":"), sort_keys=True).encode("utf-8")
-	print(json_payload)
+	if "debug" in kwargs:
+		print(json_payload)
 	# Sends requests and handles the response
 	if cloud_type == "GCM":
 		response = json.loads(_gcm_send(
