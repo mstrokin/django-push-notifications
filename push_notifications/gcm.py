@@ -144,13 +144,17 @@ def _cm_send_request(
 	if data:
 		payload["data"] = data
 	payload["android"] = {}
+	if "androidonly" in kwargs:
+		payload["android"] = payload["notification"]
+		payload["notification] = {}
 	payload["android"].update({
 		k: v for k, v in kwargs.items() if v and (k in FCM_ANDROID_OPTIONS_KEYS)
 	})
-	payload["apns"] = {}
-	payload["apns"]["headers"] = {
-		"apns-priority": "5"
-	}
+	if "androidonly" not in kwargs:
+		payload["apns"] = {}
+		payload["apns"]["headers"] = {
+			"apns-priority": "5"
+		}
 	# Attach any additional non falsy keyword args (targets, options)
 	# See ref : https://firebase.google.com/docs/cloud-messaging/http-server-ref#table1
 	payload.update({
