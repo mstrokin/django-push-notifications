@@ -146,7 +146,7 @@ def _cm_send_request(
 	payload["android"] = {}
 	if "androidonly" in kwargs:
 		payload["android"] = payload["notification"]
-		payload["notification] = {}
+		payload["notification"] = {}
 	payload["android"].update({
 		k: v for k, v in kwargs.items() if v and (k in FCM_ANDROID_OPTIONS_KEYS)
 	})
